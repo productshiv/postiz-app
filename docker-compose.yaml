@@ -12,6 +12,7 @@ services:
       - /bin/sh
       - -c
       - |
+        touch /tmp/postiz-starting;
         echo "Waiting for Temporal ($${TEMPORAL_ADDRESS:-temporal:7233}) to accept connections...";
         i=0;
         until node -e 'const net=require("net");const a=(process.env.TEMPORAL_ADDRESS||"temporal:7233").split(":");const s=net.connect(+a[1]||7233,a[0]);s.on("connect",()=>{s.end();process.exit(0)});s.on("error",()=>process.exit(1));setTimeout(()=>process.exit(1),2000);' 2>/dev/null; do
@@ -21,7 +22,18 @@ services:
           sleep 3;
         done;
         echo "Temporal reachable; starting Postiz.";
-        nginx && pnpm run pm2
+        nginx && { rm -f /tmp/postiz-starting; pnpm run pm2; }
+    # Report healthy while waiting for Temporal (marker file exists) or once the
+    # frontend port is listening, so the container is never marked unhealthy and
+    # restarted during the wait. Port 5000 = 0x1388 in /proc/net/tcp, state 0A.
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "[ -f /tmp/postiz-starting ] || grep -qsE ':1388 [0-9A-F]+:0000 0A' /proc/net/tcp /proc/net/tcp6"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     environment:
       # === Required Settings
       MAIN_URL: '${MAIN_URL:-http://localhost:4007}'
