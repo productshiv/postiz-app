@@ -3,6 +3,25 @@ services:
     image: ghcr.io/gitroomhq/postiz-app:latest
     container_name: postiz
     restart: always
+    # Postiz connects to Temporal during boot and exits if it is not reachable.
+    # Temporal only becomes reachable after Elasticsearch (~30-60s), so wait for
+    # its port before launching the app instead of crash-looping into Coolify's
+    # restart limit. Falls back to starting anyway after ~6 minutes. The default
+    # CMD (nginx && pnpm run pm2) is preserved.
+    command:
+      - /bin/sh
+      - -c
+      - |
+        echo "Waiting for Temporal ($${TEMPORAL_ADDRESS:-temporal:7233}) to accept connections...";
+        i=0;
+        until node -e 'const net=require("net");const a=(process.env.TEMPORAL_ADDRESS||"temporal:7233").split(":");const s=net.connect(+a[1]||7233,a[0]);s.on("connect",()=>{s.end();process.exit(0)});s.on("error",()=>process.exit(1));setTimeout(()=>process.exit(1),2000);' 2>/dev/null; do
+          i=$$((i+1));
+          if [ "$$i" -ge 120 ]; then echo "Temporal still unreachable after ~6m; starting Postiz anyway."; break; fi
+          echo "Temporal not ready (attempt $$i); retrying in 3s...";
+          sleep 3;
+        done;
+        echo "Temporal reachable; starting Postiz.";
+        nginx && pnpm run pm2
     environment:
       # === Required Settings
       MAIN_URL: '${MAIN_URL:-http://localhost:4007}'
