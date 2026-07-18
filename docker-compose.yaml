@@ -5,117 +5,117 @@ services:
     restart: always
     environment:
       # === Required Settings
-      MAIN_URL: 'http://localhost:4007'
-      FRONTEND_URL: 'http://localhost:4007'
-      NEXT_PUBLIC_BACKEND_URL: 'http://localhost:4007/api'
-      JWT_SECRET: 'random string that is unique to every install - just type random characters here!'
-      DATABASE_URL: 'postgresql://postiz-user:postiz-password@postiz-postgres:5432/postiz-db-local'
-      REDIS_URL: 'redis://postiz-redis:6379'
-      BACKEND_INTERNAL_URL: 'http://localhost:3000'
-      TEMPORAL_ADDRESS: 'temporal:7233'
-      IS_GENERAL: 'true'
-      DISABLE_REGISTRATION: 'false'
+      MAIN_URL: '${MAIN_URL:-http://localhost:4007}'
+      FRONTEND_URL: '${FRONTEND_URL:-http://localhost:4007}'
+      NEXT_PUBLIC_BACKEND_URL: '${NEXT_PUBLIC_BACKEND_URL:-http://localhost:4007/api}'
+      JWT_SECRET: '${JWT_SECRET:-random string that is unique to every install - just type random characters here!}'
+      DATABASE_URL: '${DATABASE_URL:-postgresql://${POSTIZ_POSTGRES_USER:-postiz-user}:${POSTIZ_POSTGRES_PASSWORD:-postiz-password}@postiz-postgres:5432/${POSTIZ_POSTGRES_DB:-postiz-db-local}}'
+      REDIS_URL: '${REDIS_URL:-redis://postiz-redis:6379}'
+      BACKEND_INTERNAL_URL: '${BACKEND_INTERNAL_URL:-http://localhost:3000}'
+      TEMPORAL_ADDRESS: '${TEMPORAL_ADDRESS:-temporal:7233}'
+      IS_GENERAL: '${IS_GENERAL:-true}'
+      DISABLE_REGISTRATION: '${DISABLE_REGISTRATION:-false}'
 
       # === Storage Settings
-      STORAGE_PROVIDER: 'local'
-      UPLOAD_DIRECTORY: '/uploads'
-      NEXT_PUBLIC_UPLOAD_DIRECTORY: '/uploads'
+      STORAGE_PROVIDER: '${STORAGE_PROVIDER:-local}'
+      UPLOAD_DIRECTORY: '${UPLOAD_DIRECTORY:-/uploads}'
+      NEXT_PUBLIC_UPLOAD_DIRECTORY: '${NEXT_PUBLIC_UPLOAD_DIRECTORY:-/uploads}'
 
       # === Cloudflare (R2) Settings
       # STORAGE_PROVIDER: 'cloudflare'
-      # CLOUDFLARE_ACCOUNT_ID: 'your-account-id'
-      # CLOUDFLARE_ACCESS_KEY: 'your-access-key'
-      # CLOUDFLARE_SECRET_ACCESS_KEY: 'your-secret-access-key'
-      # CLOUDFLARE_BUCKETNAME: 'your-bucket-name'
-      # CLOUDFLARE_BUCKET_URL: 'https://your-bucket-url.r2.cloudflarestorage.com/'
-      # CLOUDFLARE_REGION: 'auto'
+      # CLOUDFLARE_ACCOUNT_ID: '${CLOUDFLARE_ACCOUNT_ID:-}'
+      # CLOUDFLARE_ACCESS_KEY: '${CLOUDFLARE_ACCESS_KEY:-}'
+      # CLOUDFLARE_SECRET_ACCESS_KEY: '${CLOUDFLARE_SECRET_ACCESS_KEY:-}'
+      # CLOUDFLARE_BUCKETNAME: '${CLOUDFLARE_BUCKETNAME:-}'
+      # CLOUDFLARE_BUCKET_URL: '${CLOUDFLARE_BUCKET_URL:-}'
+      # CLOUDFLARE_REGION: '${CLOUDFLARE_REGION:-auto}'
 
       # === Social Media API Settings
-      X_URL: ''
-      X_API_KEY: ''
-      X_API_SECRET: ''
-      LINKEDIN_CLIENT_ID: ''
-      LINKEDIN_CLIENT_SECRET: ''
-      REDDIT_CLIENT_ID: ''
-      REDDIT_CLIENT_SECRET: ''
-      GITHUB_CLIENT_ID: ''
-      GITHUB_CLIENT_SECRET: ''
-      BEEHIIVE_API_KEY: ''
-      BEEHIIVE_PUBLICATION_ID: ''
-      THREADS_APP_ID: ''
-      THREADS_APP_SECRET: ''
-      FACEBOOK_APP_ID: ''
-      FACEBOOK_APP_SECRET: ''
-      YOUTUBE_CLIENT_ID: ''
-      YOUTUBE_CLIENT_SECRET: ''
-      TIKTOK_CLIENT_ID: ''
-      TIKTOK_CLIENT_SECRET: ''
-      PINTEREST_CLIENT_ID: ''
-      PINTEREST_CLIENT_SECRET: ''
-      DRIBBBLE_CLIENT_ID: ''
-      DRIBBBLE_CLIENT_SECRET: ''
-      TUMBLR_CLIENT_ID: ''
-      TUMBLR_CLIENT_SECRET: ''
-      DISCORD_CLIENT_ID: ''
-      DISCORD_CLIENT_SECRET: ''
-      DISCORD_BOT_TOKEN_ID: ''
-      SLACK_ID: ''
-      SLACK_SECRET: ''
-      SLACK_SIGNING_SECRET: ''
-      MASTODON_URL: 'https://mastodon.social'
-      MASTODON_CLIENT_ID: ''
-      MASTODON_CLIENT_SECRET: ''
+      X_URL: '${X_URL:-}'
+      X_API_KEY: '${X_API_KEY:-}'
+      X_API_SECRET: '${X_API_SECRET:-}'
+      LINKEDIN_CLIENT_ID: '${LINKEDIN_CLIENT_ID:-}'
+      LINKEDIN_CLIENT_SECRET: '${LINKEDIN_CLIENT_SECRET:-}'
+      REDDIT_CLIENT_ID: '${REDDIT_CLIENT_ID:-}'
+      REDDIT_CLIENT_SECRET: '${REDDIT_CLIENT_SECRET:-}'
+      GITHUB_CLIENT_ID: '${GITHUB_CLIENT_ID:-}'
+      GITHUB_CLIENT_SECRET: '${GITHUB_CLIENT_SECRET:-}'
+      BEEHIIVE_API_KEY: '${BEEHIIVE_API_KEY:-}'
+      BEEHIIVE_PUBLICATION_ID: '${BEEHIIVE_PUBLICATION_ID:-}'
+      THREADS_APP_ID: '${THREADS_APP_ID:-}'
+      THREADS_APP_SECRET: '${THREADS_APP_SECRET:-}'
+      FACEBOOK_APP_ID: '${FACEBOOK_APP_ID:-}'
+      FACEBOOK_APP_SECRET: '${FACEBOOK_APP_SECRET:-}'
+      YOUTUBE_CLIENT_ID: '${YOUTUBE_CLIENT_ID:-}'
+      YOUTUBE_CLIENT_SECRET: '${YOUTUBE_CLIENT_SECRET:-}'
+      TIKTOK_CLIENT_ID: '${TIKTOK_CLIENT_ID:-}'
+      TIKTOK_CLIENT_SECRET: '${TIKTOK_CLIENT_SECRET:-}'
+      PINTEREST_CLIENT_ID: '${PINTEREST_CLIENT_ID:-}'
+      PINTEREST_CLIENT_SECRET: '${PINTEREST_CLIENT_SECRET:-}'
+      DRIBBBLE_CLIENT_ID: '${DRIBBBLE_CLIENT_ID:-}'
+      DRIBBBLE_CLIENT_SECRET: '${DRIBBBLE_CLIENT_SECRET:-}'
+      TUMBLR_CLIENT_ID: '${TUMBLR_CLIENT_ID:-}'
+      TUMBLR_CLIENT_SECRET: '${TUMBLR_CLIENT_SECRET:-}'
+      DISCORD_CLIENT_ID: '${DISCORD_CLIENT_ID:-}'
+      DISCORD_CLIENT_SECRET: '${DISCORD_CLIENT_SECRET:-}'
+      DISCORD_BOT_TOKEN_ID: '${DISCORD_BOT_TOKEN_ID:-}'
+      SLACK_ID: '${SLACK_ID:-}'
+      SLACK_SECRET: '${SLACK_SECRET:-}'
+      SLACK_SIGNING_SECRET: '${SLACK_SIGNING_SECRET:-}'
+      MASTODON_URL: '${MASTODON_URL:-https://mastodon.social}'
+      MASTODON_CLIENT_ID: '${MASTODON_CLIENT_ID:-}'
+      MASTODON_CLIENT_SECRET: '${MASTODON_CLIENT_SECRET:-}'
 
       # === OAuth & Authentik Settings
-      # NEXT_PUBLIC_POSTIZ_OAUTH_DISPLAY_NAME: 'Authentik'
-      # NEXT_PUBLIC_POSTIZ_OAUTH_LOGO_URL: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/authentik.png'
-      # POSTIZ_GENERIC_OAUTH: 'false'
-      # POSTIZ_OAUTH_URL: 'https://auth.example.com'
-      # POSTIZ_OAUTH_AUTH_URL: 'https://auth.example.com/application/o/authorize'
-      # POSTIZ_OAUTH_TOKEN_URL: 'https://auth.example.com/application/o/token'
-      # POSTIZ_OAUTH_USERINFO_URL: 'https://authentik.example.com/application/o/userinfo'
-      # POSTIZ_OAUTH_CLIENT_ID: ''
-      # POSTIZ_OAUTH_CLIENT_SECRET: ''
-      # POSTIZ_OAUTH_SCOPE: "openid profile email"  # Optional: uncomment to override default scope
+      # NEXT_PUBLIC_POSTIZ_OAUTH_DISPLAY_NAME: '${NEXT_PUBLIC_POSTIZ_OAUTH_DISPLAY_NAME:-Authentik}'
+      # NEXT_PUBLIC_POSTIZ_OAUTH_LOGO_URL: '${NEXT_PUBLIC_POSTIZ_OAUTH_LOGO_URL:-https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/authentik.png}'
+      # POSTIZ_GENERIC_OAUTH: '${POSTIZ_GENERIC_OAUTH:-false}'
+      # POSTIZ_OAUTH_URL: '${POSTIZ_OAUTH_URL:-https://auth.example.com}'
+      # POSTIZ_OAUTH_AUTH_URL: '${POSTIZ_OAUTH_AUTH_URL:-https://auth.example.com/application/o/authorize}'
+      # POSTIZ_OAUTH_TOKEN_URL: '${POSTIZ_OAUTH_TOKEN_URL:-https://auth.example.com/application/o/token}'
+      # POSTIZ_OAUTH_USERINFO_URL: '${POSTIZ_OAUTH_USERINFO_URL:-https://authentik.example.com/application/o/userinfo}'
+      # POSTIZ_OAUTH_CLIENT_ID: '${POSTIZ_OAUTH_CLIENT_ID:-}'
+      # POSTIZ_OAUTH_CLIENT_SECRET: '${POSTIZ_OAUTH_CLIENT_SECRET:-}'
+      # POSTIZ_OAUTH_SCOPE: '${POSTIZ_OAUTH_SCOPE:-openid profile email}'  # Optional: uncomment to override default scope
 
       # === Sentry
 
-      # NEXT_PUBLIC_SENTRY_DSN: 'http://spotlight:8969/stream'
-      # SENTRY_SPOTLIGHT: '1'
+      # NEXT_PUBLIC_SENTRY_DSN: '${NEXT_PUBLIC_SENTRY_DSN:-http://spotlight:8969/stream}'
+      # SENTRY_SPOTLIGHT: '${SENTRY_SPOTLIGHT:-1}'
 
       # === Misc Settings
-      OPENAI_API_KEY: ''
-      NEXT_PUBLIC_DISCORD_SUPPORT: ''
-      NEXT_PUBLIC_POLOTNO: ''
-      API_LIMIT: 30
+      OPENAI_API_KEY: '${OPENAI_API_KEY:-}'
+      NEXT_PUBLIC_DISCORD_SUPPORT: '${NEXT_PUBLIC_DISCORD_SUPPORT:-}'
+      NEXT_PUBLIC_POLOTNO: '${NEXT_PUBLIC_POLOTNO:-}'
+      API_LIMIT: '${API_LIMIT:-30}'
 
       # === Payment / Stripe Settings
-      FEE_AMOUNT: 0.05
-      STRIPE_PUBLISHABLE_KEY: ''
-      STRIPE_SECRET_KEY: ''
-      STRIPE_SIGNING_KEY: ''
-      STRIPE_SIGNING_KEY_CONNECT: ''
+      FEE_AMOUNT: '${FEE_AMOUNT:-0.05}'
+      STRIPE_PUBLISHABLE_KEY: '${STRIPE_PUBLISHABLE_KEY:-}'
+      STRIPE_SECRET_KEY: '${STRIPE_SECRET_KEY:-}'
+      STRIPE_SIGNING_KEY: '${STRIPE_SIGNING_KEY:-}'
+      STRIPE_SIGNING_KEY_CONNECT: '${STRIPE_SIGNING_KEY_CONNECT:-}'
 
       # === Developer Settings
-      NX_ADD_PLUGINS: false
+      NX_ADD_PLUGINS: '${NX_ADD_PLUGINS:-false}'
 
       # === Short Link Service Settings (Optional - leave blank if unused)
-      # DUB_TOKEN: ""
-      # DUB_API_ENDPOINT: "https://api.dub.co"
-      # DUB_SHORT_LINK_DOMAIN: "dub.sh"
-      # SHORT_IO_SECRET_KEY: ""
-      # KUTT_API_KEY: ""
-      # KUTT_API_ENDPOINT: "https://kutt.it/api/v2"
-      # KUTT_SHORT_LINK_DOMAIN: "kutt.it"
-      # LINK_DRIP_API_KEY: ""
-      # LINK_DRIP_API_ENDPOINT: "https://api.linkdrip.com/v1/"
-      # LINK_DRIP_SHORT_LINK_DOMAIN: "dripl.ink"
+      # DUB_TOKEN: '${DUB_TOKEN:-}'
+      # DUB_API_ENDPOINT: '${DUB_API_ENDPOINT:-https://api.dub.co}'
+      # DUB_SHORT_LINK_DOMAIN: '${DUB_SHORT_LINK_DOMAIN:-dub.sh}'
+      # SHORT_IO_SECRET_KEY: '${SHORT_IO_SECRET_KEY:-}'
+      # KUTT_API_KEY: '${KUTT_API_KEY:-}'
+      # KUTT_API_ENDPOINT: '${KUTT_API_ENDPOINT:-https://kutt.it/api/v2}'
+      # KUTT_SHORT_LINK_DOMAIN: '${KUTT_SHORT_LINK_DOMAIN:-kutt.it}'
+      # LINK_DRIP_API_KEY: '${LINK_DRIP_API_KEY:-}'
+      # LINK_DRIP_API_ENDPOINT: '${LINK_DRIP_API_ENDPOINT:-https://api.linkdrip.com/v1/}'
+      # LINK_DRIP_SHORT_LINK_DOMAIN: '${LINK_DRIP_SHORT_LINK_DOMAIN:-dripl.ink}'
 
     volumes:
       - postiz-config:/config/
       - postiz-uploads:/uploads/
     ports:
-      - '4007:5000'
+      - '${POSTIZ_PORT:-4007}:5000'
     networks:
       - postiz-network
       - temporal-network
@@ -130,15 +130,15 @@ services:
     container_name: postiz-postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD: postiz-password
-      POSTGRES_USER: postiz-user
-      POSTGRES_DB: postiz-db-local
+      POSTGRES_PASSWORD: '${POSTIZ_POSTGRES_PASSWORD:-postiz-password}'
+      POSTGRES_USER: '${POSTIZ_POSTGRES_USER:-postiz-user}'
+      POSTGRES_DB: '${POSTIZ_POSTGRES_DB:-postiz-db-local}'
     volumes:
       - postgres-volume:/var/lib/postgresql/data
     networks:
       - postiz-network
     healthcheck:
-      test: pg_isready -U postiz-user -d postiz-db-local
+      test: pg_isready -U ${POSTIZ_POSTGRES_USER:-postiz-user} -d ${POSTIZ_POSTGRES_DB:-postiz-db-local}
       interval: 10s
       timeout: 3s
       retries: 3
@@ -161,7 +161,7 @@ services:
     pull_policy: always
     container_name: spotlight
     ports:
-      - 8969:8969/tcp
+      - '${SPOTLIGHT_PORT:-8969}:8969/tcp'
     image: ghcr.io/getsentry/spotlight:latest
     networks:
       - postiz-network
@@ -191,8 +191,8 @@ services:
     container_name: temporal-postgresql
     image: postgres:16
     environment:
-      POSTGRES_PASSWORD: temporal
-      POSTGRES_USER: temporal
+      POSTGRES_PASSWORD: '${TEMPORAL_POSTGRES_PASSWORD:-temporal}'
+      POSTGRES_USER: '${TEMPORAL_POSTGRES_USER:-temporal}'
     networks:
       - temporal-network
     expose:
@@ -203,7 +203,7 @@ services:
   temporal:
     container_name: temporal
     ports:
-      - '7233:7233'
+      - '${TEMPORAL_PORT:-7233}:7233'
     image: temporalio/auto-setup:1.28.1
     depends_on:
       - temporal-postgresql
@@ -211,8 +211,8 @@ services:
     environment:
       - DB=postgres12
       - DB_PORT=5432
-      - POSTGRES_USER=temporal
-      - POSTGRES_PWD=temporal
+      - POSTGRES_USER=${TEMPORAL_POSTGRES_USER:-temporal}
+      - POSTGRES_PWD=${TEMPORAL_POSTGRES_PASSWORD:-temporal}
       - POSTGRES_SEEDS=temporal-postgresql
       - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development-sql.yaml
       - ENABLE_ES=true
@@ -248,7 +248,7 @@ services:
     networks:
       - temporal-network
     ports:
-      - '8080:8080'
+      - '${TEMPORAL_UI_PORT:-8080}:8080'
 
 volumes:
   postgres-volume:
