@@ -247,8 +247,11 @@ services:
       - TEMPORAL_CORS_ORIGINS=http://127.0.0.1:3000
     networks:
       - temporal-network
-    ports:
-      - '${TEMPORAL_UI_PORT:-8080}:8080'
+    # The Temporal web UI is optional and only used for debugging. It is not
+    # published on the host to avoid host port conflicts (e.g. 8080 already in
+    # use). To expose it, set TEMPORAL_UI_PORT and uncomment the mapping below.
+    # ports:
+    #   - '${TEMPORAL_UI_PORT:-8080}:8080'
 
 volumes:
   postgres-volume:
