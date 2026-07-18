@@ -124,6 +124,8 @@ services:
         condition: service_healthy
       postiz-redis:
         condition: service_healthy
+      temporal:
+        condition: service_healthy
 
   postiz-postgres:
     image: postgres:17-alpine
@@ -225,6 +227,14 @@ services:
       - ./dynamicconfig:/etc/temporal/config/dynamicconfig
     labels:
       kompose.volume.type: configMap
+    # Temporal waits on Elasticsearch/Postgres before its frontend is ready
+    # (~30-60s). Expose readiness so dependents wait instead of crash-looping.
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 5 bash -c '</dev/tcp/127.0.0.1/7233' || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 20s
 
   temporal-admin-tools:
     container_name: temporal-admin-tools
