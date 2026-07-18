@@ -252,8 +252,14 @@ services:
       - TEMPORAL_NAMESPACE=default
     networks:
       - temporal-network
-    volumes:
-      - ./dynamicconfig:/etc/temporal/config/dynamicconfig
+    # The dynamic config is embedded here (compose "configs") instead of a
+    # relative bind mount of ./dynamicconfig, because relative bind mounts do
+    # not resolve to the repo on some hosts (e.g. Coolify) and Docker then
+    # mounts an empty dir, so Temporal cannot find development-sql.yaml and its
+    # server never starts. The target matches DYNAMIC_CONFIG_FILE_PATH.
+    configs:
+      - source: temporal-dynamicconfig
+        target: /etc/temporal/config/dynamicconfig/development-sql.yaml
     labels:
       kompose.volume.type: configMap
 
@@ -283,6 +289,16 @@ services:
     # use). To expose it, set TEMPORAL_UI_PORT and uncomment the mapping below.
     # ports:
     #   - '${TEMPORAL_UI_PORT:-8080}:8080'
+
+configs:
+  temporal-dynamicconfig:
+    content: |
+      limit.maxIDLength:
+        - value: 255
+          constraints: {}
+      system.forceSearchAttributesCacheRefreshOnRead:
+        - value: true # Dev setup only. Please don't turn this on in production.
+          constraints: {}
 
 volumes:
   postgres-volume:
