@@ -1,9 +1,11 @@
-import { Global, Injectable, Module, OnModuleInit } from '@nestjs/common';
+import { Global, Injectable, Logger, Module, OnModuleInit } from '@nestjs/common';
 import { TemporalService } from 'nestjs-temporal-core';
 import { Connection } from '@temporalio/client';
 
 @Injectable()
 export class TemporalRegister implements OnModuleInit {
+  private readonly _logger = new Logger(TemporalRegister.name);
+
   constructor(private _client: TemporalService) {}
 
   async onModuleInit(): Promise<void> {
@@ -13,6 +15,30 @@ export class TemporalRegister implements OnModuleInit {
     const connection = this._client?.client?.getRawClient()
       ?.connection as Connection;
 
+    // Temporal only becomes reachable after its own dependencies (Postgres,
+    // Elasticsearch) are ready, which can take longer than this service.
+    // Retry instead of crashing so a slow Temporal start-up does not exhaust
+    // the container restart limit.
+    const maxAttempts = 30;
+    for (let attempt = 1; ; attempt++) {
+      try {
+        await this._registerSearchAttributes(connection);
+        return;
+      } catch (err) {
+        if (attempt >= maxAttempts) {
+          throw err;
+        }
+        this._logger.warn(
+          `Temporal not ready (attempt ${attempt}/${maxAttempts}), retrying in 5s...`
+        );
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+      }
+    }
+  }
+
+  private async _registerSearchAttributes(
+    connection: Connection
+  ): Promise<void> {
     const { customAttributes } =
       await connection.operatorService.listSearchAttributes({
         namespace: process.env.TEMPORAL_NAMESPACE || 'default',
