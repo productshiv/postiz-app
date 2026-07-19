@@ -145,6 +145,11 @@ services:
     volumes:
       - postiz-config:/config/
       - postiz-uploads:/uploads/
+    # nginx serves the app on container port 5000. Expose it so a reverse proxy
+    # (e.g. Coolify/Traefik) can detect the HTTP port for routing; the image
+    # itself declares no exposed ports.
+    expose:
+      - '5000'
     ports:
       - '${POSTIZ_PORT:-4007}:5000'
     networks:
