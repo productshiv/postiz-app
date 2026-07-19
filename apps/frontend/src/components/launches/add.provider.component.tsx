@@ -470,7 +470,9 @@ export const AddProviderComponent: FC<{
           // back to the iOS/Android app after OAuth completes, instead
           // of the default web redirect.
           const params = [
-            `externalUrl=${encodeURIComponent(externalUrl)}`,
+            externalUrl
+              ? `externalUrl=${encodeURIComponent(externalUrl)}`
+              : '',
             onboardingParam,
             isMobile
               ? `redirectUrl=${encodeURIComponent('postiz://integrations')}`
