@@ -250,7 +250,9 @@ export class IntegrationsController {
       return { url };
     } catch (err) {
       console.error(`Failed to generate ${integration} auth URL`, err);
-      return { err: true };
+      const message =
+        err instanceof Error ? err.message : 'Could not connect to the platform';
+      return { err: true, message };
     }
   }
 

@@ -292,20 +292,33 @@ export class XProvider extends SocialAbstract implements SocialProvider {
   }
 
   async generateAuthUrl() {
+    const appKey = process.env.X_API_KEY;
+    const appSecret = process.env.X_API_SECRET;
+    if (!appKey || !appSecret) {
+      throw new Error('X_API_KEY and X_API_SECRET must be set');
+    }
+
+    // X_URL overrides the OAuth callback base (defaults to FRONTEND_URL).
+    // Leave X_URL empty unless you need a different callback host.
+    const callbackBase = (process.env.X_URL || process.env.FRONTEND_URL || '')
+      .trim()
+      .replace(/\/$/, '');
+    if (!callbackBase || !/^https?:\/\//i.test(callbackBase)) {
+      throw new Error(
+        'FRONTEND_URL (or X_URL) must be set to your public Postiz URL, e.g. https://postiz.example.com'
+      );
+    }
+
     const client = new TwitterApi({
-      appKey: process.env.X_API_KEY!,
-      appSecret: process.env.X_API_SECRET!,
+      appKey,
+      appSecret,
     });
     const { url, oauth_token, oauth_token_secret } =
-      await client.generateAuthLink(
-        (process.env.X_URL || process.env.FRONTEND_URL) +
-          `/integrations/social/x`,
-        {
-          authAccessType: 'write',
-          linkMode: 'authenticate',
-          forceLogin: false,
-        }
-      );
+      await client.generateAuthLink(`${callbackBase}/integrations/social/x`, {
+        authAccessType: 'write',
+        linkMode: 'authenticate',
+        forceLogin: false,
+      });
     return {
       url,
       codeVerifier: oauth_token + ':' + oauth_token_secret,

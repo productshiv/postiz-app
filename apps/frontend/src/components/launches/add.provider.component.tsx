@@ -480,17 +480,18 @@ export const AddProviderComponent: FC<{
           ]
             .filter(Boolean)
             .join('&');
-          const { url, err } = await (
+          const { url, err, message } = await (
             await fetch(
               `/integrations/social/${identifier}${params ? `?${params}` : ''}`
             )
           ).json();
           if (err) {
             toaster.show(
-              t(
-                'could_not_connect_to_platform',
-                'Could not connect to the platform'
-              ),
+              message ||
+                t(
+                  'could_not_connect_to_platform',
+                  'Could not connect to the platform'
+                ),
               'warning'
             );
             return;
