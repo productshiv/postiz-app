@@ -1,6 +1,14 @@
 services:
   postiz:
-    image: ghcr.io/gitroomhq/postiz-app:latest
+    # Build from this repo (Dockerfile.dev is the same file upstream uses to
+    # build the published image) so local code changes are included, instead of
+    # pulling the prebuilt ghcr.io/gitroomhq/postiz-app:latest image.
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      args:
+        NEXT_PUBLIC_VERSION: '${NEXT_PUBLIC_VERSION:-local}'
+    image: postiz-app:local
     container_name: postiz
     restart: always
     # Postiz connects to Temporal during boot and exits if it is not reachable.

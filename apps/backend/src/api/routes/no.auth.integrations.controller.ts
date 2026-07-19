@@ -163,6 +163,8 @@ export class NoAuthIntegrationsController {
           });
         }
 
+        console.error(`Failed to authenticate ${integration}`, err);
+
         return res({
           error: 'Authentication failed',
           accessToken: '',
